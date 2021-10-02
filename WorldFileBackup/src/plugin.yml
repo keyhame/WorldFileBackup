@@ -1,0 +1,18 @@
+name: "WorldFileBackup"
+version: 1.2.1
+api-version: "1.17"
+main: "org.keyhame.backup.Main"
+description: "A Backup Plugin."
+author: "keyhame"
+
+commands:
+  wbackup:
+    aliases:
+      - wfb
+      - wb
+      - backup
+    description: "Make a backup now."
+
+permissions:
+  worldfilebackup:
+    default: op

@@ -1,0 +1,67 @@
+#配置版本（不要动）
+cVersion: 1
+
+#有关备份
+backup:
+  #备份文件夹（server为根目录）
+  folder: "backups"
+  #备份压缩与否
+  enable_zip: true
+  #备份压缩等级
+  level: 4
+  #备份时是否发送消息
+  warn: true
+
+#自动备份
+auto:
+  #是否启用自动备份
+  enabled: true
+  #备份间隔时间（单位：s）
+  time: 7200
+  #备份文件满时是否自动删除
+  enable_delete: true
+  #备份文件最多个数
+  num_max: 10
+  #备份文件最大大小（单位：kb）
+  size_max: 1048576
+
+#语言说明
+language:
+  FIRST_NAME: "%1[%3WFB%1] %6"
+  CONFIG_OLDER: "%4插件配置文件版本过旧，请更新. 输入/wfb clear config 指令以刷新配置文件"
+  CONFIG_DELETION: "%4配置条目缺失："
+  BACKUP:
+    START: "备份开始."
+    WARN_MESSAGE: "服务器即将备份."
+    ERROR: "&4备份时出错."
+    FINISH: "完成备份."
+  COMMAND:
+    PERMISSION: "权限不足."
+    ANALYSE_ERROR: "命令解析错误."
+    BACKUP_START: "开始进行备份."
+    BACKUP_ERROR: "%4备份时出错，已终止备份."
+    BACKUP_FINISH: "完成备份."
+    LEADING_HELP: "输入/wbackup 查看更多帮助信息."
+  HELP:
+    DESCRIPTION: "%6WorldFileBackup 是一个用于备份的插件."
+    AUTHOR: "%6他的作者是 keyhame."
+    COMMAND:
+      USAGE: "%6/wbackup 指令用法:"
+      INFO: "%9>%b /wbackup help%e 显示此帮助."
+      HELP: "%9>%b /wbackup info%e 查看插件及备份信息."
+      AUTO_BACKUP: "%9>%b /wbackup autobackup%e 设置是否自动备份."
+      BACKUP: "%9>%b /wbackup backup%e 手动创建一个备份."
+  INFO:
+    OPEN: "%e 自动备份已开启."
+    CLOSE: "%e 自动备份已关闭."
+    START: "%e 自动备份信息: "
+    TIME: "%9>%b 备份等待时间: %e"
+    WARN: "%9>%b 备份前是否警告: %e"
+    LEVEL: "%9>%b 备份等级: %e"
+    SIZE: "%9>%b 备份文件夹已使用大小: %e"
+    NUM: "%9>%b 备份文件夹内现存备份: %e"
+  AUTO:
+    START: "开始自动备份线程."
+    FULL: "备份文件夹大小超过限制,将停止自动备份线程."
+    ERROR: "自动备份出现问题."
+    STOP: "停止自动备份线程."
