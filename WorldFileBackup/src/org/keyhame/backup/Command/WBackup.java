@@ -82,12 +82,18 @@ public  class WBackup implements TabExecutor {
                     else if (Backup.getSize() > 1024) outSize = String.format("%.2f",Backup.getSize() / (1024.00)) + "KB";
                     else outSize = Backup.getSize() + "BYTE";
 
+                    String outWaitTime;
+                    if (Main.getPlugin().getAutoBackup().getWAIT_TIME() > 86400) outWaitTime = String.format("%.2f",(Main.getPlugin().getAutoBackup().getWAIT_TIME() / 86400.00)) + "d";
+                    else if (Main.getPlugin().getAutoBackup().getWAIT_TIME() > 3600) outWaitTime = String.format("%.2f",(Main.getPlugin().getAutoBackup().getWAIT_TIME() / 3600.00)) + "h";
+                    else if (Main.getPlugin().getAutoBackup().getWAIT_TIME() > 60) outWaitTime = String.format("%.2f",(Main.getPlugin().getAutoBackup().getWAIT_TIME() / 60.00)) + "min";
+                    else outWaitTime = Main.getPlugin().getAutoBackup().getWAIT_TIME() + "s";
+
                     sender.sendMessage(language.getLanguageString("HELP.DESCRIPTION"));
                     sender.sendMessage(language.getLanguageString("HELP.AUTHOR"));
                     sender.sendMessage(language.getLanguageString("INFO.START"));
                     sender.sendMessage((Main.getPlugin().getAutoBackup() == null || Main.getPlugin().getAutoBackup().isCancelled())
                             ?language.getLanguageString("INFO.CLOSE"):language.getLanguageString("INFO.OPEN"));
-                    sender.sendMessage(language.getLanguageString("INFO.TIME") + Main.getPlugin().getAutoBackup().getWAIT_TIME());
+                    sender.sendMessage(language.getLanguageString("INFO.TIME") + outWaitTime);
                     sender.sendMessage(language.getLanguageString("INFO.WARN") + Backup.getWarning());
                     sender.sendMessage(language.getLanguageString("INFO.LEVEL") + Backup.getBackupLevel());
                     sender.sendMessage(language.getLanguageString("INFO.SIZE") + outSize);

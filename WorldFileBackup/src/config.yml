@@ -41,7 +41,7 @@ language:
     BACKUP_START: "开始进行备份."
     BACKUP_ERROR: "%4备份时出错，已终止备份."
     BACKUP_FINISH: "完成备份."
-    LEADING_HELP: "输入/wbackup 查看更多帮助信息."
+    LEADING_HELP: "输入/wbackup help查看更多帮助信息."
   HELP:
     DESCRIPTION: "%6WorldFileBackup 是一个用于备份的插件."
     AUTHOR: "%6他的作者是 keyhame."

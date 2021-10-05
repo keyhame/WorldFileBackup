@@ -6,18 +6,18 @@ import java.io.IOException;
 
 public class AutoBackup extends BukkitRunnable {
     private boolean isCancel = false;
-    private final long ONCE_WAIT_TIME = 2000;
+    private final long ONCE_WAIT_TIME = 1000;
     private final long WAIT_TIME;
     private final int BACKUP_NUM;
     private final long BACKUP_SIZE;
 
     public AutoBackup(long waitTime, int backupNum, long backupSize){
-        this.WAIT_TIME = waitTime;
+        this.WAIT_TIME = waitTime/1000;
         this.BACKUP_NUM = backupNum;
-        this.BACKUP_SIZE = backupSize;
+        this.BACKUP_SIZE = backupSize*1024;
     }
 
-    public long getWAIT_TIME() { return WAIT_TIME; }
+    public long getWAIT_TIME() { return WAIT_TIME/1000; }
 
     @Override
     public void run() {
@@ -64,7 +64,6 @@ public class AutoBackup extends BukkitRunnable {
             Thread.sleep(ONCE_WAIT_TIME);
         } catch (InterruptedException ignored) {
         }
-        super.cancel();
         Main.getPlugin().getLogger().info(Main.getPlugin().getLanguage().getLanguageString("AUTO.STOP"));
     }
 }

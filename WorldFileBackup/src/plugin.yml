@@ -1,5 +1,5 @@
 name: "WorldFileBackup"
-version: 1.2.1
+version: 1.2.2
 api-version: "1.17"
 main: "org.keyhame.backup.Main"
 description: "A Backup Plugin."
