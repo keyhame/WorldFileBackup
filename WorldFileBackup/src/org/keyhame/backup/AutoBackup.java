@@ -11,32 +11,38 @@ public class AutoBackup extends BukkitRunnable {
     private final int BACKUP_NUM;
     private final long BACKUP_SIZE;
 
-    public AutoBackup(long waitTime, int backupNum, long backupSize){
-        this.WAIT_TIME = waitTime/1000;
+    public AutoBackup(long waitTime, int backupNum, long backupSize) {
+        this.WAIT_TIME = waitTime / 1000;
         this.BACKUP_NUM = backupNum;
-        this.BACKUP_SIZE = backupSize*1024;
+        this.BACKUP_SIZE = backupSize * 1024;
     }
 
-    public long getWAIT_TIME() { return WAIT_TIME/1000; }
+    public long getWAIT_TIME() {
+        return WAIT_TIME / 1000;
+    }
 
     @Override
     public void run() {
         Main.getPlugin().getLogger().info(Main.getPlugin().getLanguage().getLanguageString("AUTO.START"));
 
         while (true) {
-            if ( BACKUP_SIZE != -1 && Backup.getSize() >= BACKUP_SIZE){
+            //备份文件夹大小检查
+            if (BACKUP_SIZE != -1 && Backup.getSize() >= BACKUP_SIZE) {
                 Main.getPlugin().getLogger().warning(Main.getPlugin().getLanguage().getLanguageString("AUTO.FULL"));
                 this.cancel();
             }
 
-            if(Backup.getNum() >= BACKUP_NUM && BACKUP_NUM != -1){
+            //备份文件夹数量检查
+            if (Backup.getNum() >= BACKUP_NUM && BACKUP_NUM != -1) {
                 Backup.deleteOldest();
             }
 
+            //等待
             try {
-                for(long l = 0; l<WAIT_TIME; l+=ONCE_WAIT_TIME){
+                for (long l = 0; l < WAIT_TIME; l += ONCE_WAIT_TIME) {
                     Thread.sleep(ONCE_WAIT_TIME);
-                    if(isCancel){
+                    //检查是否被取消
+                    if (isCancel) {
                         return;
                     }
                 }
@@ -46,7 +52,7 @@ public class AutoBackup extends BukkitRunnable {
                         Main.getPlugin().getLanguage().getLanguageString("AUTO.ERROR"));
                 return;
             }
-
+            //备份
             try {
                 Backup.backup();
             } catch (IOException e) {

@@ -1,6 +1,5 @@
 package org.keyhame.backup.Command;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,12 +7,12 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.keyhame.Util.Language;
-import org.keyhame.Util.SendMessage;
 import org.keyhame.backup.Backup;
 import org.keyhame.backup.Main;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,31 @@ public  class WBackup implements TabExecutor {
             return;
         }
         sender.sendMessage(reason);
+    }
+
+    private synchronized void clearConfig(CommandSender sender){
+        File config = new File(Main.getPlugin().getDataFolder(),"plugin.yml");
+        if (config.exists()) {
+            if (!config.delete()) {
+                commandError(sender, Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR"));
+                return ;
+            }
+            Main.getPlugin().getLogger().info(
+                    Main.getPlugin().getLanguage().getLanguageString("CLEAR.CONFIG_C"));
+        }
+        Main.getPlugin().saveDefaultConfig();
+        Main.getPlugin().reloadConfig();
+        Main.getPlugin().getLogger().info(
+                Main.getPlugin().getLanguage().getLanguageString("CLEAR.CONFIG_R"));
+    }
+
+    private synchronized void clearBackups(CommandSender sender){
+        if(!Backup.getBackupFolder().delete()) {
+            commandError(sender, Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR"));
+            return ;
+        }
+        Main.getPlugin().getLogger().info(
+                Main.getPlugin().getLanguage().getLanguageString("CLEAR.BACKUP"));
     }
 
     @Override
@@ -115,10 +139,35 @@ public  class WBackup implements TabExecutor {
                             sender.sendMessage(language.getLanguageString("INFO.CLOSE"));
                             return true;
                         }
-
-                        commandError(sender,null);
                     }
+                    commandError(sender,null);
                     return true;
+                }
+
+                case "clear": {
+                    if(args.length >= 2 ){
+                        if(args[1].equals("config")){
+                            clearConfig(sender);
+                            return true;
+                        }
+                        if(args[1].equals("backup")){
+                            clearBackups(sender);
+                            return true;
+                        }
+                        if(args[1].equals("all")){
+                            clearConfig(sender);
+                            clearBackups(sender);
+                            return true;
+                        }
+                        commandError(sender,null);
+                        return true;
+                    }
+                    clearConfig(sender);
+                    clearBackups(sender);
+                    return true;
+                }
+                case "reload": {
+                    Main.getPlugin().reloadConfig();
                 }
                 default: {
                     commandError(sender, null);
@@ -126,7 +175,6 @@ public  class WBackup implements TabExecutor {
             }
             return true;
         }
-
         sender.sendMessage(language.getLanguageString("HELP.DESCRIPTION"));
         sender.sendMessage(language.getLanguageString("HELP.AUTHOR"));
         sender.sendMessage(language.getLanguageString("COMMAND.LEADING_HELP"));
@@ -143,16 +191,25 @@ public  class WBackup implements TabExecutor {
         switch (args.length) {
             case 0:
             case 1: {
+                list.add("reload");
                 list.add("help");
                 list.add("backup");
                 list.add("info");
                 list.add("autobackup");
+                list.add("clear");
                 break;
             }
             case 2:{
                 if(args[0].equals("autobackup")){
                     list.add("true");
                     list.add("false");
+                    break;
+                }
+                if(args[0].equals("clear")){
+                    list.add("backup");
+                    list.add("config");
+                    list.add("all");
+                    break;
                 }
             }
         }

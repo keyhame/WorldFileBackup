@@ -3,9 +3,11 @@ package org.keyhame.backup;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.keyhame.Util.SendMessage;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,6 +64,10 @@ public class Backup {
         if ( !(backupFolder.exists() && backupFolder.isDirectory()) ) return false;
         BackupFolder = backupFolder;
         return true;
+    }
+
+    public static File getBackupFolder(){
+        return BackupFolder;
     }
 
     /**
