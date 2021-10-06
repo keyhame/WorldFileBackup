@@ -12,7 +12,7 @@ public class AutoBackup extends BukkitRunnable {
     private final long BACKUP_SIZE;
 
     public AutoBackup(long waitTime, int backupNum, long backupSize) {
-        this.WAIT_TIME = waitTime / 1000;
+        this.WAIT_TIME = waitTime * 1000;
         this.BACKUP_NUM = backupNum;
         this.BACKUP_SIZE = backupSize * 1024;
     }
@@ -65,11 +65,11 @@ public class AutoBackup extends BukkitRunnable {
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
+        Main.getPlugin().getLogger().info(Main.getPlugin().getLanguage().getLanguageString("AUTO.STOP"));
         isCancel = true;
         try {
             Thread.sleep(ONCE_WAIT_TIME);
         } catch (InterruptedException ignored) {
         }
-        Main.getPlugin().getLogger().info(Main.getPlugin().getLanguage().getLanguageString("AUTO.STOP"));
     }
 }

@@ -16,50 +16,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public  class WBackup implements TabExecutor {
     private final Language language;
 
     public WBackup(){
         language = Main.getPlugin().getLanguage();
-    }
-
-    @ParametersAreNonnullByDefault
-    //用于返回错误解析的函数
-    private void commandError(CommandSender sender, @Nullable String reason) {
-        if (reason == null) {
-            reason = Main.getPlugin().getLanguage().getLanguageString("FIRST_NAME");
-        }
-        if (sender instanceof Server) {
-            Main.getPlugin().getLogger().warning(reason);
-            return;
-        }
-        sender.sendMessage(reason);
-    }
-
-    private synchronized void clearConfig(CommandSender sender){
-        File config = new File(Main.getPlugin().getDataFolder(),"plugin.yml");
-        if (config.exists()) {
-            if (!config.delete()) {
-                commandError(sender, Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR"));
-                return ;
-            }
-            Main.getPlugin().getLogger().info(
-                    Main.getPlugin().getLanguage().getLanguageString("CLEAR.CONFIG_C"));
-        }
-        Main.getPlugin().saveDefaultConfig();
-        Main.getPlugin().reloadConfig();
-        Main.getPlugin().getLogger().info(
-                Main.getPlugin().getLanguage().getLanguageString("CLEAR.CONFIG_R"));
-    }
-
-    private synchronized void clearBackups(CommandSender sender){
-        if(!Backup.getBackupFolder().delete()) {
-            commandError(sender, Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR"));
-            return ;
-        }
-        Main.getPlugin().getLogger().info(
-                Main.getPlugin().getLanguage().getLanguageString("CLEAR.BACKUP"));
     }
 
     @Override
@@ -166,9 +129,12 @@ public  class WBackup implements TabExecutor {
                     clearBackups(sender);
                     return true;
                 }
+
                 case "reload": {
                     Main.getPlugin().reloadConfig();
+                    sender.sendMessage(Main.getPlugin().getLanguage().getLanguageString("RELOAD.FINISH"));
                 }
+
                 default: {
                     commandError(sender, null);
                 }
@@ -214,5 +180,70 @@ public  class WBackup implements TabExecutor {
             }
         }
         return list;
+    }
+
+    @ParametersAreNonnullByDefault
+    //用于返回错误解析的函数
+    private void commandError(CommandSender sender, @Nullable String reason) {
+        if (reason == null) {
+            reason = Main.getPlugin().getLanguage().getLanguageString("FIRST_NAME");
+        }
+        if (sender instanceof Server) {
+            Main.getPlugin().getLogger().warning(reason);
+            return;
+        }
+        sender.sendMessage(reason);
+    }
+
+    //清理配置
+    private synchronized void clearConfig(CommandSender sender){
+        File config = new File(Main.getPlugin().getDataFolder(),"config.yml");
+        if (config.exists()) {
+            if (!config.delete()) {
+                commandError(sender, Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR"));
+                return ;
+            }
+            sender.sendMessage(Main.getPlugin().getLanguage().getLanguageString("CLEAR.CONFIG_C"));
+        }
+        Main.getPlugin().saveDefaultConfig();
+        Main.getPlugin().reloadConfig();
+        sender.sendMessage(Main.getPlugin().getLanguage().getLanguageString("CLEAR.CONFIG_R"));
+    }
+
+    //清理备份
+    private synchronized void clearBackups(CommandSender sender){
+        deleteDirectory(Backup.getBackupFolder(),sender);
+        if(!Backup.getBackupFolder().exists()){
+            try {
+                Backup.getBackupFolder().createNewFile();
+            } catch (IOException e) {
+                commandError(sender,Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR"));
+                e.printStackTrace();
+            }
+        }
+        sender.sendMessage(Main.getPlugin().getLanguage().getLanguageString("CLEAR.BACKUP"));
+    }
+
+    //删除目录下所有文件
+    private void deleteDirectory(File file, CommandSender sender){
+        if(!file.exists()) return;
+        if(file.isFile()){
+            if(!file.delete()){
+                commandError(sender,Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR") + "--" + file.getPath());
+                return;
+            }
+            return;
+        }
+
+        File[] children = file.listFiles();
+        if(children != null && children.length >= 1){
+            for(File child: children){
+                deleteDirectory(child,sender);
+            }
+        }
+
+        if(!file.delete()){
+            commandError(sender,Main.getPlugin().getLanguage().getLanguageString("CLEAR.ERROR") + "--" + file.getPath());
+        }
     }
 }

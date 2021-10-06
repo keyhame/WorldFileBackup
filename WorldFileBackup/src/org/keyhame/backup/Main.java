@@ -38,12 +38,22 @@ public final class Main extends JavaPlugin {
     }
 
     @Override
+    public void onDisable() {
+        if(autoBackup != null){
+            autoBackup.cancel();
+        }
+    }
+
+    @Override
     public void reloadConfig() {
         super.reloadConfig();
         loadConfig();
     }
 
     private void loadConfig() {
+        if(autoBackup != null){
+            autoBackup.cancel();
+        }
         //配置处理
         FileConfiguration config = getConfig();
         language = new Language(config);

@@ -72,10 +72,9 @@ public class Backup {
 
     /**
      * 此方法用于压缩传入的文件到指定备份文件夹，并且写入注释，日期信息
+     * 小心线程阻塞
      */
-
     public synchronized static void backup() throws IOException {
-
         //如果没有加载插件
         if(!Main.getPlugin().isEnabled()) {
             return;
@@ -99,6 +98,7 @@ public class Backup {
         }while (file.exists());
         file.mkdirs();
 
+        Bukkit.broadcastMessage(ChatColor.YELLOW + Main.getPlugin().getLanguage().getLanguageString("BACKUP.START"));
         AtomicBoolean saved = new AtomicBoolean(false);
         for (World world : Bukkit.getWorlds()) {
             //保存世界
@@ -119,7 +119,6 @@ public class Backup {
                 }
             }
 
-            Bukkit.broadcastMessage(ChatColor.YELLOW + Main.getPlugin().getLanguage().getLanguageString("BACKUP.START"));
             //备份
             File worldFolder = world.getWorldFolder();
 

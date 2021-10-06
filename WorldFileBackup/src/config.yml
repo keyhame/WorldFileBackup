@@ -51,6 +51,8 @@ language:
       HELP: "%9>%b /wbackup info%e 查看插件及备份信息."
       AUTO_BACKUP: "%9>%b /wbackup autobackup%e 设置是否自动备份."
       BACKUP: "%9>%b /wbackup backup%e 手动创建一个备份."
+      CLEAR: "%9>%b /wbackup clear%e 清理备份或者删除配置."
+      RELOAD: "%9>%b /wbackup reload%e 重新从加载配置."
   INFO:
     OPEN: "%e 自动备份已开启."
     CLOSE: "%e 自动备份已关闭."
@@ -62,14 +64,14 @@ language:
     NUM: "%9>%b 备份文件夹内现存备份: %e"
   AUTO:
     START: "开始自动备份线程."
-    FULL: "&4备份文件夹大小超过限制,将停止自动备份线程."
-    ERROR: "&4自动备份出现问题."
+    FULL: "%4备份文件夹大小超过限制,将停止自动备份线程."
+    ERROR: "%4自动备份出现问题."
     STOP: "停止自动备份线程."
   CLEAR:
     CONFIG_C: "旧配置已删除."
     CONFIG_R: "配置已更新."
     BACKUP: "备份已完全删除."
-    ERROR: "&4清理时出错!"
+    ERROR: "%4清理时出错!"
   RELOAD:
     FINISH: "已成功重新从硬盘加载配置."
-    ERROR: "&4重新从硬盘加载配置失败!"
+    ERROR: "%4重新从硬盘加载配置失败!"
